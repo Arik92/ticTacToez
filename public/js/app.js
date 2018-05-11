@@ -29,16 +29,16 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     .state('signup', {
       url: '/signup',
       templateUrl: '/templates/signup.html',
-      //controller: 'authCtrl'
+      controller: 'authCtrl'
     })
     .state('login', {
       url: '/login',
       templateUrl: '/templates/login.html',
-      //controller: 'authCtrl'
+      controller: 'authCtrl'
     })
     .state('logout', {
       url: '/logout',
       templateUrl: '/templates/home.html',
-      //controller: 'authCtrl'
+      controller: 'authCtrl'
     })
 });
