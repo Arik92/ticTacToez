@@ -7,11 +7,16 @@
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
     <base href="/">
     </head>
-    <body >
-        <nav class="navbar">
+    <body>
+        <nav class="navbar" ng-controller="authCtrl">
+                <h3 ng-if="currentUser">Welcome, {{currentUser}}</h3>
                 <a class="navbar-brand" ui-sref='signup'>Signup</a>
                 <a class="navbar-brand" ui-sref='home'>Home</a>
-                <a class="navbar-brand" ui-sref='login'>Login</a>
+                <a class="navbar-brand" ui-sref='login' ng-hide="currentUser">Login</a>
+                <a class="navbar-brand" ui-sref='login' ng-show="currentUser">Create Game</a>
+                <a class="navbar-brand" ui-sref='login' ng-show="currentUser">Join Game</a>
+                <a class="navbar-brand" ng-click='logout()' ng-show="currentUser">Log Out</a>
+
         </nav>
         <div ng-controller="homeCtrl">
         <div ui-view></div>

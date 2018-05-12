@@ -20,14 +20,7 @@ app.factory('authService', function($http) {
         .then(function(response) {
           return response.data;
         })
-    }
-  
-    auth.logout = function(user) {
-      return $http.get('/users/logout')
-        .then(function(reponse) {
-          console.log("auth logout");
-        })
-    }
+    }  
   
     return auth;
   });
