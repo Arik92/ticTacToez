@@ -8,7 +8,7 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
       url: '/home',
       templateUrl: '/templates/home.html',
       controller: function($rootScope) { //, authFactory
-        //$rootScope.currentUser = authFactory.currentUser.username;
+        $rootScope.currentUser =  $rootScope.currentUser = localStorage.getItem("ticTacUser");
         //console.log("user from state of home is: ", authFactory.currentUser.username);
       } //NOTE: maybe remove for authControl?
     })
@@ -40,5 +40,10 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
       url: '/logout',
       templateUrl: '/templates/home.html',
       controller: 'authCtrl'
-    })
+    })    
 });
+app.run([ '$rootScope', function ($rootScope) {
+  //$rootScope.currentUser = JSON.parse(localStorage.getItem("ticTacUser"));
+   $rootScope.currentUser = localStorage.getItem("ticTacUser");
+   console.log("current user", $rootScope.currentUser);
+}])

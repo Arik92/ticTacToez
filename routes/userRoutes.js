@@ -57,8 +57,12 @@ router.post('/login', function(req, res1) {
     if (err) {
       console.log(err.stack);    
     } else {
-      console.log(res);
-      res1.send('login successful');
+      console.log(res.rows[0]);
+      if ((res.rows[0])&&(res.rows[0].password.localeCompare(req.body.password)===0)){
+        res1.send(true);
+      } else {
+        res1.send(false)
+      }
       //pool.end();
       // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
     }

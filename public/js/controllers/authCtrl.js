@@ -1,5 +1,11 @@
-app.controller('authCtrl', [ '$scope', '$state','authService', '$stateParams','$location', function($scope, $state, authService, $stateParams, $location ) {
+app.controller('authCtrl', [ '$scope','$timeout' ,'authService', '$stateParams','$state', '$location', function($scope, $timeout, authService, $stateParams, $state, $location ) {
     //$scope.username = authService.currentUser.username;
+    this.$onInit = function() {
+      //$scope.currentUser = false;
+      //$scope.currentUser = localStorage.getItem("ticTacUser");        
+      console.log("current user is", $scope.currentUser);    
+    }//on init
+
   $scope.join = function() {
     //add validation
     console.log("joining user? ", $scope.user);
@@ -10,21 +16,43 @@ app.controller('authCtrl', [ '$scope', '$state','authService', '$stateParams','$
               alert(result.data.errorText);
           } else {
               //timeout
-              $state.go('home');
-          }
+              $timeout(function () {
+                $scope.$apply();
+                $location.path('/');
+              }, 500);              
+          }//else
       });
-  };// join/signin
+    };// join/signin
 
   $scope.login = function() {
     //add validation
-    authService.login($scope.user)
-      .then(function(result) {
-       console.log("login result", result);
-       //$state.go('home');
+    authService.login($scope.user).then(function(result) {
+        //console.log(result);
+        //console.log("Ctrl response is "+result+" of type "+typeof(result));
+        if (result.data===false) {
+          alert("Wrong username/password");
+        } else {         
+          localStorage.setItem('ticTacUser', $scope.user.username);
+          //$scope.currentUser = $scope.user.username;         
+          $timeout(function () { 
+            $location.path('/');   
+            window.location.reload(true);                       
+            /*$state.go('home', {}, {
+              reload: true
+            });                       */
+          }, 500);
+        }//else       
       });
-  };//login
+    };//login
   $scope.logout = function() {
-    console.log("logging out");
+    localStorage.removeItem('ticTacUser');
+    $scope.currentUser = null;
+    $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+    /*console.log("logging out");
     authService.logout($scope.user)
       .then(function() {
         console.log("logged out");
@@ -33,6 +61,6 @@ app.controller('authCtrl', [ '$scope', '$state','authService', '$stateParams','$
         });
       }, function(err) {
         alert(err.data);
-      });
+      });*/
   };//logout
 }]);//authCtrl
