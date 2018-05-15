@@ -24,7 +24,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
     }
-    $scope.gameBoard = board;
     console.log("Starting board ",board);
   })
   socket.on('update', function(game){
