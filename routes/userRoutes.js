@@ -36,7 +36,7 @@ const pool = new Pool({
 
 //the user routes go here
 router.post('/join', function(req, res1, next){
-  var text = 'INSERT INTO postgres.tictactoe.users(username, password) VALUES($1, $2) RETURNING *';
+  var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password) VALUES($1, $2) RETURNING *';
   var values = [req.body.username, req.body.password];
   pool.query(text, values, (err, res) => {
     if (err) {
@@ -62,7 +62,7 @@ router.post('/login', function(req, res1) {
   var selq = {
     username: req.body.username
   }
-  var text ='SELECT username, password FROM postgres.tictactoe.users WHERE username =$1 ';
+  var text ='SELECT username, password FROM gfnzpmjz.tictactoe.users WHERE username =$1 ';
   //console.log("query text is", text);
   pool.query(text,[ req.body.username], (err, res) => {
     if (err) {
