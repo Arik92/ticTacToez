@@ -1,3 +1,17 @@
 <div class="container">
-    I are a game boardZ
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-3">
+                <div class="square" ng-repeat="square in gameBoard track by $index">
+                <div class="content">
+                    <div class="table">
+                        <div class="table-cell" ng-click="tacMove($index)"> 
+                                <img ng-if="isOne(square)"style="height: 15em; width: 15em" src="x.jpeg" />                                                            
+                                <img ng-if="isTwo(square)"style="height: 15em; width: 15em" src="circle.jpeg" />                             
+                            </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>

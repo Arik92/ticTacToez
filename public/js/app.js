@@ -12,8 +12,8 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
         //console.log("user from state of home is: ", authFactory.currentUser.username);
       } //NOTE: maybe remove for authControl?
     })
-    .state('play', {
-      url: '/play',
+    .state('newgame', {
+      url: '/newgame',
       templateUrl: '/templates/gameboard.html', // board would be a page with instructions and the player board
       controller: 'gameCtrl'
     })
