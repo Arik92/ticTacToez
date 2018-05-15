@@ -40,8 +40,7 @@ io.on('connection', function(socket){
     console.log("player 1 id ", player1Socket);
     socket.join('gameRoom');
     //socket.to(player1Socket).emit('private', 'I just met you'); -> PM
-    io.sockets.in('gameRoom').emit('player1Message', 'x');
-    io.sockets.in('gameRoom').emit('player2Message', 'o');
+    io.sockets.in('gameRoom').emit('player1Message', 'x');    
     //io.sockets.broadcast.to(player1Socket).emit('private', 'for your eyes only');
     //socket.broadcast.to('gameRoom').emit('waiting', 'Loading... Waiting for a player to join');
   } else if (io.engine.clientsCount===2) {

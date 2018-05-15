@@ -55,8 +55,18 @@ router.post('/join', function(req, res1, next){
     }
   })
 });
-
-
+/*
+CREATE TABLE tictactoe.users
+(
+    username text  NOT NULL,
+    password text  NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (username)
+)
+WITH (
+    OIDS = FALSE
+)
+SELECT * FROM tictactoe.USERS
+ */
 router.post('/login', function(req, res1) {
   console.log("request body", req.body);
   var selq = {
