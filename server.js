@@ -47,15 +47,20 @@ io.on('connection', function(socket){
   } else if (io.engine.clientsCount===2) {
     var game = {
       numMoves: 0,
-      gameBoard: []
+      gameBoard: 0
     }//game
     socket.join('gameRoom');    
-    io.sockets.in('gameRoom').emit('message', 'y');
-    player2Socket = socket.id;
-    io.emit('play');
+    io.sockets.in('gameRoom').emit('play', game);    
   } else {
     io.emit('tooMany', 'Game already in progress. Check again soon!');
   }  
+  socket.on('update', function(game){
+    if (game.winner!==null) {
+      io.sockets.in('gameRoom').emit('winner', game);
+      //TODO: server request for winner handling in db
+    }// if we have a winner
+    io.sockets.in('gameRoom').emit('update', game);
+  })
   socket.on('chat message', function(msg){
   io.emit('chat message',msg);
   });

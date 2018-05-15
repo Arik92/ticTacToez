@@ -1,11 +1,11 @@
 app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $stateParams, ) {
   
-  this.$onInit = function() {
+  this.$onInit = function() {     
     $scope.gameBoard = [];
   }//onInit 
   var socket = io();
   socket.on('connect', function onConnect(){
-    console.log('This socket is now connected to the Sails server.');
+    console.log('This socket is now connected to the server.');
   });
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
@@ -13,19 +13,24 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
   socket.on('player1Message', function(){
     $scope.playerValue = 1;
     console.log("You will begin the game as x. Waiting on another player");
-    //$scope.playerValue = 1;      
   })
   
-  socket.on('play', function(board){ //starting position
+  socket.on('play', function(game){ //starting position
+    var boardNum = baseThreeToDecimal(game.gameBoard);
+    $scope.game.numMoves = game.numMoves;
+    $scope.gameBoard = makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
+    console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
     }
     $scope.gameBoard = board;
     console.log("Starting board ",board);
   })
-  socket.on('gameState', function(state){
-    //this function gets the boardstate(ideally, this is a number) and prepares the new number array 
-    //var fullNum = makeBoard(baseThreeToDecimal(state));    
+  socket.on('update', function(game){
+    console.log("client update");
+    $scope.game.numMoves = game.numMoves;
+    //this function gets the boardstate(ternary number) and prepares the new number array 
+    $scope.gameBoard = makeBoard(baseThreeToDecimal(board));         
   })
 
   $scope.isOne = function(num) {    
@@ -43,12 +48,11 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
 
   $scope.tacMove = function($index) {            
     //player value is either 1 for x, or 2 for circle    
-    var game = {};        
     if ($scope.gameBoard[$index] === 0) {
-      if ((game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
+      if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
         $scope.gameBoard[$index] = 2; 
         updateServer(); // when move is made, update the board,      
-      } else if ((game.numMoves % 2 !== 0) && ($scope.playerValue === 1)) {
+      } else if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 1)) {
         $scope.gameBoard[$index] = 1;   
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
@@ -82,22 +86,32 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     }//else
   }//checkWin
   
-  function updateServer(num) {
+  function updateServer() {
     //check for winner needs to be done HERE, because the board is still in array form
-    var isWinner = checkWin();
-    //var boardNum = makeNumber($scope.gameBoard)
+    var gameWon = checkWin();
+    var winnerName = null;
+    if (gameWon) {
+      winnerName = localStorage.getItem("ticTacUser");
+      console.log("winner identity is", winnerName);
+    }// if getting winner identity
+    var boardNum = makeNumber($scope.gameBoard); //array to decimal
+    boardNum = toBaseThree(boardNum); //decimal to ternary
+    $scope.game.numMoves++;
     var boardState = {
-      board: boardNum,
-      isWinner: isWinner,
-      winnerName: localStorage.getItem("ticTacUser")
+      'board': boardNum,
+      'gameWon': isWinner,
+      'winnerName': winnerName,
+      'numMoves': $scope.game.numMoves
     }
-    //turn array into decimal number
-    //turn decimal into trinary num
 
+    socket.emit('update', boardState);
     // emit update
   }
+
+  ////////////////////////********************CONVERSION FUNCTIONS**************************************/////////////////////
   function makeBoard(num) {
-    //debugger;
+    //function takes a DECIMAL number and turns it into a length 9 array with appropriate numbers
+    //ex: [0][0][0][0][0][0][0][0][0] for empty board( 0 for input)
     console.log("initial num", num);
     var gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     var currDigit = gameBoard.length;//9
@@ -109,10 +123,9 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
       currDigit--;
       num = Math.floor(num/10);
     }//while 
-    gameBoard[currDigit-1] = num;
-    //function takes a DECIMAL number and turns it into a length 9 array with appropriate numbers
-    //ex: [0][0][0][0][0][0][0][0][0] for empty board( 0 for input)
+    gameBoard[currDigit-1] = num;    
   }
+
   function makeNumber(board) {
     //exact opposite of make board. take a board and turn into a decimal number
     var res = 0;
@@ -132,7 +145,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
       //converts a decimal number to base 3 representation. for board-state record keeping
       var str = num.toString(3);
        var res = parseInt(str, 10);
-      console.log(num+" to base 3 "+res);
+      console.log(num+" to base 3 "+res+" and its a "+typeof(res));
       return res;
   }//toBaseThree 
   
@@ -142,4 +155,5 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
       console.log(num+" to base 10 "+str);
       return res;
   }//BTTD consider migrating these to a service   
+
 }]);//gameCtrl
