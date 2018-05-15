@@ -20,6 +20,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     $scope.game = {};
     $scope.game.numMoves = game.numMoves;
     $scope.gameBoard = makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
+    console.log("starting game board", $scope.gameBoard);
     console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
