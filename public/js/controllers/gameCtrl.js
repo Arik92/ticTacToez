@@ -124,6 +124,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
       num = Math.floor(num/10);
     }//while 
     gameBoard[currDigit-1] = num;    
+    return gameBoard;
   }
 
   function makeNumber(board) {
