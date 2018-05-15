@@ -35,6 +35,9 @@ var gameInProgress = false; //future use
 
 io.on('connection', function(socket){  
   //console.log(io.engine);
+  io.on('whois', function(name){
+    console.log(name+" has connected to game room");
+  })
   console.log("there are "+io.engine.clientsCount+"people in game room");
   if (io.engine.clientsCount===1) {
     player1Socket = socket.id;

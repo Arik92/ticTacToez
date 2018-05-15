@@ -6,6 +6,8 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
   var socket = io();
   socket.on('connect', function onConnect(){
     console.log('This socket is now connected to the server.');
+    var name = localStorage.getItem("ticTacUser")
+    io.emit('whois',name );
   });
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
