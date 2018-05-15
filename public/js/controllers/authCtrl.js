@@ -15,6 +15,7 @@ app.controller('authCtrl', [ '$scope','$timeout' ,'authService', '$stateParams',
           if (result.data.errorText) {
               alert(result.data.errorText);
           } else {
+            localStorage.setItem('ticTacUser', $scope.user.username);
               //timeout
               $timeout(function () {
                 $scope.$apply();
