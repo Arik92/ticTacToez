@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { Postgras_user, Postgras_password } = require('../config.js');
+const  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port;
+if (process.env.NODE_ENV === 'production') {
+  Postgras_user = process.env.Postgras_user;
+  Postgras_host = process.env.Postgras_host;//host
+  Postgras_db = process.env.Postgras_db;//db
+  Postgras_password = process.env.Postgras_password;
+  Postgras_port = process.env.Postgras_port;//port
+  //callbackURL = "https://danktickets.herokuapp.com/users/facebook/callback";
+ } else {
+  //callbackURL = "http://localhost:8000/users/facebook/callback";
+  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port = require('../config.js');
+ }
 const { Pool, Client } = require('pg');
 //console.log("db creds", Postgras_user+ Postgras_password);
 //var passport = require('passport'); consider using just localStorage
@@ -11,10 +22,10 @@ const { Pool, Client } = require('pg');
 
 const pool = new Pool({
   user: Postgras_user,
-  host: 'localhost',
-  database: 'postgres',
+  host: Postgras_host,
+  database: Postgras_db,
   password: Postgras_password,
-  port: 5432,
+  port: Postgras_port,
 })
 /*pool.query('SELECT * from postgres.tictactoe.users', (err, res) => {
   console.log("user?", res);
