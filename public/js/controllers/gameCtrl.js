@@ -19,7 +19,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     var boardNum = baseThreeToDecimal(game.gameBoard);
     $scope.game = {};
     $scope.game.numMoves = game.numMoves;
-    $scope.gameBoard = makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
+    makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
     console.log("starting game board", $scope.gameBoard);
     console.log(game);
     if ($scope.playerValue!==1) {
@@ -30,7 +30,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     console.log("client update");
     $scope.game.numMoves = game.numMoves;
     //this function gets the boardstate(ternary number) and prepares the new number array 
-    $scope.gameBoard = makeBoard(baseThreeToDecimal(board));         
+    makeBoard(baseThreeToDecimal(board));         
   })
 
   $scope.isOne = function(num) {    
@@ -87,10 +87,12 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
   }//checkWin
   
   function updateServer() {
+    var isWinner = false;
     //check for winner needs to be done HERE, because the board is still in array form
     var gameWon = checkWin();
     var winnerName = null;
     if (gameWon) {
+      isWinner = true;
       winnerName = localStorage.getItem("ticTacUser");
       console.log("winner identity is", winnerName);
     }// if getting winner identity
@@ -113,18 +115,17 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     //function takes a DECIMAL number and turns it into a length 9 array with appropriate numbers
     //ex: [0][0][0][0][0][0][0][0][0] for empty board( 0 for input)
     console.log("initial num", num);
-    var gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    var currDigit = gameBoard.length;//9
+    $scope.gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var currDigit = $scope.gameBoard.length;//9
     var dig;
     while (num>=10) {
       dig = Math.floor(num%10); //takes rightmost digit
       console.log("current rightmost digit is"+num+" , "+dig);
-      gameBoard[currDigit-1] = dig;
+      $scope.gameBoard[currDigit-1] = dig;
       currDigit--;
       num = Math.floor(num/10);
     }//while 
-    gameBoard[currDigit-1] = num;    
-    return gameBoard;
+    $scope.gameBoard[currDigit-1] = num;   
   }
 
   function makeNumber(board) {
