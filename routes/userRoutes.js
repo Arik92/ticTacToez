@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port;
+var  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port;
 if (process.env.NODE_ENV === 'production') {
   Postgras_user = process.env.Postgras_user;
   Postgras_host = process.env.Postgras_host;//host
