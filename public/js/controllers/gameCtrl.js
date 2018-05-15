@@ -47,14 +47,14 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     return false;
   }//isTwo
 
-  $scope.tacMove = function($index) {            
+  $scope.tacMove = function(index) {            
     //player value is either 1 for x, or 2 for circle    
-    if ($scope.gameBoard[$index] === 0) {
+    if ($scope.gameBoard[index] === 0) {
       if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
-        $scope.gameBoard[$index] = 2; 
+        $scope.gameBoard[index] = 2; 
         updateServer(); // when move is made, update the board,      
       } else if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 1)) {
-        $scope.gameBoard[$index] = 1;   
+        $scope.gameBoard[index] = 1;   
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
     } //if guarentee empty square   
@@ -106,7 +106,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
       'winnerName': winnerName,
       'numMoves': $scope.game.numMoves
     }
-
     socket.emit('update', boardState);
     // emit update
   }
