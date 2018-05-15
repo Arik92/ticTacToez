@@ -30,7 +30,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     console.log("client update");
     $scope.game.numMoves = game.numMoves;
     //this function gets the boardstate(ternary number) and prepares the new number array 
-    makeBoard(baseThreeToDecimal(board));         
+    makeBoard(baseThreeToDecimal(game.gameBoard));         
   })
 
   $scope.isOne = function(num) {    
