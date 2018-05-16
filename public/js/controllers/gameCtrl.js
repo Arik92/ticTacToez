@@ -54,7 +54,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     $scope.$apply();
   })
   socket.on('update', function(game){
-    console.log("client update");
+    console.log("client update", game);
     $scope.game.numMoves = game.numMoves;
     //this function gets the boardstate(ternary number) and prepares the new number array 
     console.log("base 3 from server", game.gameBoard);
@@ -131,13 +131,13 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     console.log("Im sending into the server", boardNum);
     boardNum = toBaseThree(boardNum); //decimal to ternary
     $scope.game.numMoves++;
-    var boardState = {
+    var game = {
       'board': boardNum,
       'gameWon': isWinner,
       'winnerName': winnerName,
       'numMoves': $scope.game.numMoves
     }
-    socket.emit('update', boardState);
+    socket.emit('update', game);
     // emit update
   }
   
