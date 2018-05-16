@@ -68,7 +68,7 @@ io.on('connection', function(socket){
     socket.disconnect();
   }  
   socket.on('update', function(game){
-    if (game.winner!==null) {
+    if (game.gameWon) {
       io.sockets.in('gameRoom').emit('winner', game);
       //TODO: server request for winner handling in db
     }// if we have a winner
