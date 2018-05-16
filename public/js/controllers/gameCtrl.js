@@ -42,11 +42,11 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
   })
   
   socket.on('play', function(game){ //starting position
-    var boardNum = baseThreeToDecimal(game.gameBoard);
+    var boardNum = baseThreeToDecimal(game.board);
     $scope.game = {};
     $scope.game.numMoves = game.numMoves;
     makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
-    console.log("starting game board", $scope.gameBoard);
+    console.log("starting game board", $scope.board);
     console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
