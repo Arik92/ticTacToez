@@ -98,6 +98,30 @@ router.get('/weekly', function(req, res1) {
     }
   }) 
 }); //weekly scores
+router.get('/monthly', function(req, res1) {  
+  var text ='SELECT username, monthlyscore FROM gfnzpmjz.tictactoe.users ORDER BY monthlyscore DESC limit 10; ';
+  //console.log("query text is", text);
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);    
+    } else {
+      console.log(res.rows[0]);
+      res1.send(res.rows);     
+    }
+  }) 
+});
+router.get('/daily', function(req, res1) {  
+  var text ='SELECT username, dailyscore FROM gfnzpmjz.tictactoe.users ORDER BY dailyscore DESC limit 10; ';
+  //console.log("query text is", text);
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);    
+    } else {
+      console.log(res.rows[0]);
+      res1.send(res.rows);     
+    }
+  }) 
+});
 /*
 CREATE TABLE tictactoe.users
 (
