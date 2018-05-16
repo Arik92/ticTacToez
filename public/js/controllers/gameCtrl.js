@@ -74,7 +74,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
   }//isTwo
 
   $scope.tacMove = function(index) {            
-    console.log("player value is"+$scope.playerValue+" and number of moves is"+$scpoe.game.numMoves);
+    console.log("player value is"+$scope.playerValue+" and number of moves is"+$scope.game.numMoves);
     //player value is either 1 for x, or 2 for circle    
     if ($scope.gameBoard[index] === 0) {
       if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
