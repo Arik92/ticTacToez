@@ -59,7 +59,7 @@ io.on('connection', function(socket){
   } else if (numPlayers===2) {
     var game = {
       numMoves: 0,
-      gameBoard: 0
+      board: 0
     }//game
     socket.join('gameRoom');    
     io.sockets.in('gameRoom').emit('play', game);    
