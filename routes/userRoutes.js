@@ -36,8 +36,8 @@ const pool = new Pool({
 
 //the user routes go here
 router.post('/join', function(req, res1, next){
-  var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password) VALUES($1, $2) RETURNING *';
-  var values = [req.body.username, req.body.password];
+  var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password, totalscore, dailyscore, weeklyscore, monthlyscore) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+  var values = [req.body.username, req.body.password, 0, 0, 0, 0];
   pool.query(text, values, (err, res) => {
     if (err) {
       console.log(err.stack);
@@ -55,6 +55,49 @@ router.post('/join', function(req, res1, next){
     }
   })
 });
+//////////////////////////////////////////////////////// SCORE KEEPING ///////////////////////////////////
+router.put('/addScore', function(req, res1, next){
+  /* UPDATE weather SET temp_lo = temp_lo+1, temp_hi = temp_lo+15, prcp = DEFAULT
+  WHERE city = 'San Francisco' AND date = '2003-07-03';*/
+  var text = 'UPDATE gfnzpmjz.tictactoe.users SET totalscore = totalscore+1, dailyscore = dailyscore+1, weeklyscore = weeklyscore+1, monthlyscore = monthlyscore+1 WHERE username = $1';  
+  var value = [req.body];
+  pool.query(text, value, (err, res) => {
+    if (err) {
+      console.log(err.stack);       
+      //throw (err);     
+      //pool.end();
+    } else {
+      console.log(res.rows[0]);
+      res1.send(res);
+      //pool.end();
+      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+    }
+  })
+});
+router.get('/alltime', function(req, res1) {  
+  var text ='SELECT username, totalscore FROM gfnzpmjz.tictactoe.users ORDER BY totalscore DESC limit 10; ';
+  //console.log("query text is", text);
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);    
+    } else {
+      console.log(res.rows[0]);
+      res1.send(res.rows);     
+    }
+  }) 
+}); //all time scores
+router.get('/weekly', function(req, res1) {  
+  var text ='SELECT username, weeklyscore FROM gfnzpmjz.tictactoe.users ORDER BY weeklyscore DESC limit 10; ';
+  //console.log("query text is", text);
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);    
+    } else {
+      console.log(res.rows[0]);
+      res1.send(res.rows);     
+    }
+  }) 
+}); //weekly scores
 /*
 CREATE TABLE tictactoe.users
 (
@@ -69,9 +112,9 @@ SELECT * FROM tictactoe.USERS
  */
 router.post('/login', function(req, res1) {
   console.log("request body", req.body);
-  var selq = {
+  /*var selq = {
     username: req.body.username
-  }
+  } */
   var text ='SELECT username, password FROM gfnzpmjz.tictactoe.users WHERE username =$1 ';
   //console.log("query text is", text);
   pool.query(text,[ req.body.username], (err, res) => {
@@ -85,29 +128,8 @@ router.post('/login', function(req, res1) {
         res1.send(false)
       }
       //pool.end();
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
     }
-  })
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  //res.send(req.user)
+  })  
 });
 
-// router.get('/success', function (req, res){
-//   if (req.isAuthenticated()) {
-//     res.send('Hey, ' + req.user + ', hello from the server!');
-//   } else {
-//     res.redirect('/login');
-//   }
-// });
-
-router.get('/logout', function (req, res) { //Why is this here? logout can be client specific with localStorage
-  // you can leave the server alone with this one. just signup/login update the 
-  req.logout();
-  console.log("in logout server route");
-  res.send('Logged out!');
-});
-
-    // Successful authentication, redirect home.
-   // res.redirect('/');
 module.exports = router;

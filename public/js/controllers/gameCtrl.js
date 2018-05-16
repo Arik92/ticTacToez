@@ -126,7 +126,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     if (gameWon) {
       isWinner = true;
       winnerName = localStorage.getItem("ticTacUser");
-      console.log("winner identity is", winnerName);
+      
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
     console.log("Im sending into the server", boardNum);

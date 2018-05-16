@@ -21,6 +21,13 @@ app.factory('authService', function($http) {
           return response.data;
         })
     }  
+
+    auth.updateWinner = function(winnerName) {
+      return $http.put('/user/addScore', winnerName)
+      .then(function(response){
+        return response.data;
+      })
+    }
   
     return auth;
   });
