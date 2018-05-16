@@ -58,7 +58,8 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     $scope.game.numMoves = game.numMoves;
     //this function gets the boardstate(ternary number) and prepares the new number array 
     console.log("base 3 from server", game.board);
-    makeBoard(baseThreeToDecimal(game.board));         
+    makeBoard(baseThreeToDecimal(game.board)); 
+    $scope.$apply();        
   })
 
   $scope.isOne = function(num) {    
