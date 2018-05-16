@@ -9,6 +9,30 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     var name = localStorage.getItem("ticTacUser")
     socket.emit('whois',name );
   });
+  socket.on('clear', function(){
+    alert("time's up!");
+      $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+  });//
+  socket.on('toomany', function(){
+    alert("Game room full for now. Check back soon");
+      $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+  });//not very DRY
+  socket.on('winner', function(game){
+    console.log(game.winnerName+" is the winner!!! redirecting");
+    $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 1000);
+  })
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
   });
@@ -111,6 +135,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     socket.emit('update', boardState);
     // emit update
   }
+  
 
   ////////////////////////********************CONVERSION FUNCTIONS**************************************/////////////////////
   function makeBoard(num) {

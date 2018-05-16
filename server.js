@@ -35,6 +35,10 @@ var gameInProgress = false; //future use
 var numPlayers = 0;
 
 io.on('connection', function(socket){  
+  setInterval(function(){
+    io.sockets.in('gameRoom').emit('clear');
+    socket.disconnect();
+  }, 1000*60*2);// 2 minuts when testing, 5 for dev env
   //console.log(io.engine); 
   numPlayers++;
   socket.on('whois', function(name){
@@ -61,6 +65,7 @@ io.on('connection', function(socket){
     io.sockets.in('gameRoom').emit('play', game);    
   } else {
     io.emit('tooMany', 'Game already in progress. Check again soon!');
+    socket.disconnect();
   }  
   socket.on('update', function(game){
     if (game.winner!==null) {
