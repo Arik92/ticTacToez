@@ -127,6 +127,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
       console.log("winner identity is", winnerName);
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
+    console.log("Im sending into the server", boardNum);
     boardNum = toBaseThree(boardNum); //decimal to ternary
     $scope.game.numMoves++;
     var boardState = {
@@ -169,6 +170,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
         res*=10;
         res+=board[i];      
     }//for 
+    console.log(board);
     console.log("turned into", res);
     return res;
   }//makeNumber 
