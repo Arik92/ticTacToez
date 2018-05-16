@@ -1,4 +1,4 @@
-app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $stateParams, ) {
+app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', function($scope, $stateParams,$timeout,$state) {
   
   this.$onInit = function() {     
     $scope.gameBoard = [];
