@@ -74,13 +74,16 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
   }//isTwo
 
   $scope.tacMove = function(index) {            
+    console.log("player value is"+$scope.playerValue+" and number of moves is"+$scpoe.game.numMoves);
     //player value is either 1 for x, or 2 for circle    
     if ($scope.gameBoard[index] === 0) {
       if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
+        console.log("turned to circle");
         $scope.gameBoard[index] = 2; 
         updateServer(); // when move is made, update the board,      
       } else if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 1)) {
         $scope.gameBoard[index] = 1;   
+        console.log("turned to circle");
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
     } //if guarentee empty square   

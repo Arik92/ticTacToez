@@ -38,7 +38,7 @@ io.on('connection', function(socket){
   setInterval(function(){
     io.sockets.in('gameRoom').emit('clear');
     socket.disconnect();
-  }, 1000*60*2);// 2 minuts when testing, 5 for dev env
+  }, 1000*60*5);// 2 minuts when testing, 5 for dev env
   //console.log(io.engine); 
   numPlayers++;
   socket.on('whois', function(name){
