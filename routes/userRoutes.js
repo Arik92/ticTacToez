@@ -10,8 +10,13 @@ if (process.env.NODE_ENV === 'production') {
   //callbackURL = "https://danktickets.herokuapp.com/users/facebook/callback";
  } else {
   //callbackURL = "http://localhost:8000/users/facebook/callback";
-  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port = require('../config.js');
- }
+  var postgrasDefs = require('../config.js');  
+  Postgras_user = postgrasDefs.Postgras_user;
+   Postgras_password = postgrasDefs.Postgras_password;
+   Postgras_host = postgrasDefs.Postgras_host;
+   Postgras_db = postgrasDefs.Postgras_db;
+   Postgras_port = postgrasDefs.Postgras_port;
+ }//else getting postgras defs
 const { Pool, Client } = require('pg');
 //console.log("db creds", Postgras_user+ Postgras_password);
 //var passport = require('passport'); consider using just localStorage
