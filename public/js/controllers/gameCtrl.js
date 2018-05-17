@@ -84,8 +84,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
         $scope.gameBoard[index] = 2; 
         updateServer(); // when move is made, update the board,      
       } else if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 1)) {
-        $scope.gameBoard[index] = 1;   
-        console.log("turned to circle");
+        $scope.gameBoard[index] = 1;          
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
     } //if guarentee empty square   

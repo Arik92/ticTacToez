@@ -72,7 +72,7 @@ router.put('/addScore', function(req, res1, next){
       //throw (err);     
       //pool.end();
     } else {
-      console.log(res.rows[0]);
+      console.log(res);
       res1.send(res);
       //pool.end();
       // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
@@ -86,7 +86,7 @@ router.get('/alltime', function(req, res1) {
     if (err) {
       console.log(err.stack);    
     } else {
-      console.log(res.rows[0]);
+      console.log(res);
       res1.send(res.rows);     
     }
   }) 
@@ -98,7 +98,7 @@ router.get('/weekly', function(req, res1) {
     if (err) {
       console.log(err.stack);    
     } else {
-      console.log(res.rows[0]);
+      console.log(res);
       res1.send(res.rows);     
     }
   }) 
@@ -110,7 +110,7 @@ router.get('/monthly', function(req, res1) {
     if (err) {
       console.log(err.stack);    
     } else {
-      console.log(res.rows[0]);
+      console.log(res);
       res1.send(res.rows);     
     }
   }) 
@@ -122,7 +122,7 @@ router.get('/daily', function(req, res1) {
     if (err) {
       console.log(err.stack);    
     } else {
-      console.log(res.rows[0]);
+      console.log(res);
       res1.send(res.rows);     
     }
   }) 
