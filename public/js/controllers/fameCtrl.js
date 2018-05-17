@@ -10,30 +10,32 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
     $scope.getAllScore = function() {
         fameService.getAllTime().then(function(response){
             console.log("All time result");
-            $scope.updateScore(response, 0);
+            updateScore(response, 0);
         })
     }//getAllScore
     $scope.getDailyScore = function() {
         fameService.getDaily().then(function(response){
             console.log("Daily result");
-            $scope.updateScore(response, 1);
+            updateScore(response, 1);
         })
     }//getDaily
     $scope.getWeeklyScore = function() {
         fameService.getWeekly().then(function(response){
             console.log("weekly result");
-            $scope.updateScore(response, 2);
+            updateScore(response, 2);
         })
     }//getWeekly
     $scope.getMonthlyScore = function() {
         fameService.getMonthly().then(function(response){
             console.log("monthly result");
-            $scope.updateScore(response, 3);
+            updateScore(response, 3);
         })
     }//getMonthly
     function updateScore(arr, index) {
+        $scope.scores = [];
         for (var i=0;i<arr.length;i++) {
-
+            $scope.scores.push(arr[i]);
         }//for 
+        $scope.scoreIndex = index;
     }//updateScore 
 }]);//fameCtrl
