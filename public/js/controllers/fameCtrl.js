@@ -5,37 +5,59 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
         $scope.scoreIndex = 0;
       // get all time scores by default
       $scope.scores = [];      
-      console.log("current user is", $scope.currentUser);    
+      console.log("current user is", $scope.currentUser);
+      $scope.getAllScore(); 
     }//on init
     $scope.getAllScore = function() {
         fameService.getAllTime().then(function(response){
-            console.log("All time result");
-            updateScore(response, 0);
+            console.log("All time result", result);
+            $scope.scores = [];
+        for (var i=0;i<arr.length;i++) {
+            $scope.scores.push({
+                'username': arr[i].username,
+                'score': arr[i].totalscore
+            });
+        }//for 
+        $scope.scoreIndex = 0;           
         })
     }//getAllScore
     $scope.getDailyScore = function() {
         fameService.getDaily().then(function(response){
             console.log("Daily result");
-            updateScore(response, 1);
+            $scope.scores = [];
+            for (var i=0;i<arr.length;i++) {
+                $scope.scores.push({
+                    'username': arr[i].username,
+                    'score': arr[i].dailyscore
+                });
+            }//for 
+            $scope.scoreIndex = 1; 
         })
     }//getDaily
     $scope.getWeeklyScore = function() {
         fameService.getWeekly().then(function(response){
             console.log("weekly result");
-            updateScore(response, 2);
+            $scope.scores = [];
+            for (var i=0;i<arr.length;i++) {
+                $scope.scores.push({
+                    'username': arr[i].username,
+                    'score': arr[i].weeklyscore
+                });
+            }//for 
+            $scope.scoreIndex = 2; 
         })
     }//getWeekly
     $scope.getMonthlyScore = function() {
         fameService.getMonthly().then(function(response){
             console.log("monthly result");
-            updateScore(response, 3);
+            $scope.scores = [];
+            for (var i=0;i<arr.length;i++) {
+                $scope.scores.push({
+                    'username': arr[i].username,
+                    'score': arr[i].monthlyscore
+                });
+            }//for 
+            $scope.scoreIndex = 3; 
         })
-    }//getMonthly
-    function updateScore(arr, index) {
-        $scope.scores = [];
-        for (var i=0;i<arr.length;i++) {
-            $scope.scores.push(arr[i]);
-        }//for 
-        $scope.scoreIndex = index;
-    }//updateScore 
+    }//getMonthly    
 }]);//fameCtrl
