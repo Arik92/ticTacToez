@@ -1,4 +1,4 @@
-app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', function($scope, $stateParams,$timeout,$state) {
+app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'authService', function($scope, $stateParams,$timeout,$state, authService) {
   
   this.$onInit = function() {     
     $scope.gameBoard = [];
@@ -26,7 +26,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     }, 500);
   });//not very DRY
   socket.on('winner', function(game){
-    console.log(game.winnerName+" is the winner!!! redirecting");
+    alert(game.winnerName+" is the winner!!! redirecting");
     $timeout(function () {
       $state.go('home', {}, {
         reload: true
