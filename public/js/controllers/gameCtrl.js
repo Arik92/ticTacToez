@@ -25,14 +25,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       });
     }, 500);
   });//not very DRY
-  socket.on('winner', function(game){
-    alert(game.winnerName+" is the winner!!! redirecting");
-    $timeout(function () {
-      $state.go('home', {}, {
-        reload: true
-      });
-    }, 1000);
-  })
+  
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
   });
@@ -59,7 +52,15 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     //this function gets the boardstate(ternary number) and prepares the new number array 
     console.log("base 3 from server", game.board);
     makeBoard(baseThreeToDecimal(game.board)); 
-    $scope.$apply();        
+    $scope.$apply();
+    if (game.gameWon)    {
+      alert(game.winnerName+" is the winner!!! redirecting");
+      $timeout(function () {
+        $state.go('home', {}, {
+          reload: true
+        });
+      }, 1000);
+    }//if winner
   })
 
   $scope.isOne = function(num) {    

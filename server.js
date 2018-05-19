@@ -65,11 +65,7 @@ io.on('connection', function(socket){
     io.emit('tooMany', 'Game already in progress. Check again soon!');
     socket.disconnect();
   }  
-  socket.on('update', function(game){
-    if (game.gameWon) {
-      io.sockets.in('gameRoom').emit('winner', game);
-      //TODO: server request for winner handling in db
-    }// if we have a winner
+  socket.on('update', function(game){    
     io.sockets.in('gameRoom').emit('update', game);
   })
   socket.on('chat message', function(msg){
@@ -77,9 +73,7 @@ io.on('connection', function(socket){
   });
   socket.on('disconnect', function(){    
     console.log("goodbye");    
-    console.log("engine? ", io.engine.clientsCount);
-    console.log("players? ", numPlayers);
-  })
+    console.log("engine? ", io.engine.clientsCount);  })
 });
 
 
