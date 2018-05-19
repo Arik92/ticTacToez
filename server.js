@@ -32,15 +32,14 @@ app.all('*', function(req, res) {
 var player1Socket;
 var player2Socket;
 var gameInProgress = false; //future use
-var numPlayers = 0;
+
 
 io.on('connection', function(socket){  
   setInterval(function(){
     io.sockets.in('gameRoom').emit('clear');
     socket.disconnect();
   }, 1000*60*5);// 2 minuts when testing, 5 for dev env
-  //console.log(io.engine); 
-  numPlayers++;
+  //console.log(io.engine);   
   socket.on('whois', function(name){
     console.log(name+" has connected to game room");
   })
@@ -48,7 +47,7 @@ io.on('connection', function(socket){
   console.log("there are "+io.engine.clientsCount+"people in game room");
   console.log("there are "+numPlayers+"people in game room");
 
-  if (numPlayers===1) {
+  if (io.engine.clientsCount===1) {
     player1Socket = socket.id;
     console.log("player 1 id ", player1Socket);
     socket.join('gameRoom');
@@ -56,7 +55,7 @@ io.on('connection', function(socket){
     io.sockets.in('gameRoom').emit('player1Message');    
     //io.sockets.broadcast.to(player1Socket).emit('private', 'for your eyes only');
     //socket.broadcast.to('gameRoom').emit('waiting', 'Loading... Waiting for a player to join');
-  } else if (numPlayers===2) {
+  } else if (io.engine.clientsCount===2) {
     var game = {
       numMoves: 0,
       board: 0
@@ -78,8 +77,7 @@ io.on('connection', function(socket){
   io.emit('chat message',msg);
   });
   socket.on('disconnect', function(){    
-    console.log("goodbye");
-    numPlayers--;
+    console.log("goodbye");    
     console.log("engine? ", io.engine.clientsCount);
     console.log("players? ", numPlayers);
   })
