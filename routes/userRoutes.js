@@ -55,8 +55,7 @@ router.post('/join', function(req, res1, next){
     } else {
       console.log(res.rows[0]);
       res1.send(res);
-      //pool.end();
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+      //pool.end();  
     }
   })
 });
@@ -71,13 +70,10 @@ router.put('/addScore', function(req, res1, next){
     if (err) {
       console.log(err.stack);       
       //throw (err);     
-      //pool.end();
     } else {
       console.log(res);
-      res1.send(res);
-      //pool.end();
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-    }
+      res1.send(res);           
+    }//else
   })
 });
 router.get('/alltime', function(req, res1) {  

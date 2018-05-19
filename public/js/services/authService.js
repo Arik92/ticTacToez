@@ -14,17 +14,12 @@ app.factory('authService', function($http) {
           return response;
         });
     };
-  
-    auth.getCurrentUser = function() {
-      return $http.get('/users/currentUser')
-        .then(function(response) {
-          return response.data;
-        })
-    }  
 
-    auth.updateWinner = function(winnerName) {
-      console.log("im adding score at service now");
-      return $http.put('/users/addScore', winnerName)
+    auth.updateWinner = function(winnerName) {  
+      var winObj = {
+        'winnerName': winnerName
+      }//winObj    
+      return $http.put('/users/addScore', winnerObj)
       .then(function(response){
         return response.data;
       })
