@@ -10,9 +10,9 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
     }//on init
     $scope.getAllScore = function() {
         fameService.getAllTime().then(function(response){
-            console.log("All time result", result);
+            console.log("All time result",response);
             $scope.scores = [];
-        for (var i=0;i<arr.length;i++) {
+        for (var i=0;i<response.length;i++) {
             $scope.scores.push({
                 'username': arr[i].username,
                 'score': arr[i].totalscore
@@ -23,9 +23,9 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
     }//getAllScore
     $scope.getDailyScore = function() {
         fameService.getDaily().then(function(response){
-            console.log("Daily result");
+            console.log("Daily result", response);
             $scope.scores = [];
-            for (var i=0;i<arr.length;i++) {
+            for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
                     'username': arr[i].username,
                     'score': arr[i].dailyscore
@@ -36,9 +36,9 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
     }//getDaily
     $scope.getWeeklyScore = function() {
         fameService.getWeekly().then(function(response){
-            console.log("weekly result");
+            console.log("weekly result", response);
             $scope.scores = [];
-            for (var i=0;i<arr.length;i++) {
+            for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
                     'username': arr[i].username,
                     'score': arr[i].weeklyscore
@@ -49,9 +49,9 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
     }//getWeekly
     $scope.getMonthlyScore = function() {
         fameService.getMonthly().then(function(response){
-            console.log("monthly result");
+            console.log("monthly result", response);
             $scope.scores = [];
-            for (var i=0;i<arr.length;i++) {
+            for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
                     'username': arr[i].username,
                     'score': arr[i].monthlyscore
