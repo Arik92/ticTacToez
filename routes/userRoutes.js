@@ -63,7 +63,7 @@ router.post('/join', function(req, res1, next){
 router.put('/addScore', function(req, res1, next){
   /* UPDATE weather SET temp_lo = temp_lo+1, temp_hi = temp_lo+15, prcp = DEFAULT
   WHERE city = 'San Francisco' AND date = '2003-07-03';*/
-  console.log("adding to ", req.body);
+  console.log("adding to ", req.body.winnerName);
   var text = 'UPDATE gfnzpmjz.tictactoe.users SET totalscore = totalscore+1, dailyscore = dailyscore+1, weeklyscore = weeklyscore+1, monthlyscore = monthlyscore+1 WHERE username = $1';  
   var value = [req.body.winnerName];
   pool.query(text, value, (err, res) => {
