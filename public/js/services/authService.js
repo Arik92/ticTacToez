@@ -19,7 +19,7 @@ app.factory('authService', function($http) {
       var winObj = {
         'winnerName': winnerName
       }//winObj    
-      return $http.put('/users/addScore', winnerObj)
+      return $http.put('/users/addScore', winObj)
       .then(function(response){
         return response.data;
       })
