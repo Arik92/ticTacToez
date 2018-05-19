@@ -139,6 +139,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     }
     socket.emit('update', game);
     if (gameWon) {
+      console.log("winner name is", winnerName);
       authService.updateWinner(winnerName).then(function(response){
         console.log("score++");
       })  

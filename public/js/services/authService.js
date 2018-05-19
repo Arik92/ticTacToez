@@ -23,6 +23,7 @@ app.factory('authService', function($http) {
     }  
 
     auth.updateWinner = function(winnerName) {
+      console.log("im adding score at service now");
       return $http.put('/users/addScore', winnerName)
       .then(function(response){
         return response.data;
