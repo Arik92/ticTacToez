@@ -14,8 +14,8 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
             $scope.scores = [];
         for (var i=0;i<response.length;i++) {
             $scope.scores.push({
-                'username': arr[i].username,
-                'score': arr[i].totalscore
+                'username': response[i].username,
+                'score': response[i].totalscore
             });
         }//for 
         $scope.scoreIndex = 0;           
@@ -27,8 +27,8 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
             $scope.scores = [];
             for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
-                    'username': arr[i].username,
-                    'score': arr[i].dailyscore
+                    'username': response[i].username,
+                    'score': response[i].dailyscore
                 });
             }//for 
             $scope.scoreIndex = 1; 
@@ -40,8 +40,8 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
             $scope.scores = [];
             for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
-                    'username': arr[i].username,
-                    'score': arr[i].weeklyscore
+                    'username': response[i].username,
+                    'score': response[i].weeklyscore
                 });
             }//for 
             $scope.scoreIndex = 2; 
@@ -53,8 +53,8 @@ app.controller('fameCtrl', [ '$scope', 'fameService', function($scope, fameServi
             $scope.scores = [];
             for (var i=0;i<response.length;i++) {
                 $scope.scores.push({
-                    'username': arr[i].username,
-                    'score': arr[i].monthlyscore
+                    'username': response[i].username,
+                    'score': response[i].monthlyscore
                 });
             }//for 
             $scope.scoreIndex = 3; 
