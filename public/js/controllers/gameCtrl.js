@@ -27,7 +27,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
   });//not very DRY
   socket.on('winner', function(game){
     console.log(game.winnerName+" is the winner!!! redirecting");
-    $timeout(function () {      
+    $timeout(function () {
       $state.go('home', {}, {
         reload: true
       });
@@ -124,8 +124,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
     var winnerName = null;
     if (gameWon) {
       isWinner = true;
-      winnerName = localStorage.getItem("ticTacUser");
-      
+      winnerName = localStorage.getItem("ticTacUser");         
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
     console.log("Im sending into the server", boardNum);
@@ -138,6 +137,11 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', funct
       'numMoves': $scope.game.numMoves
     }
     socket.emit('update', game);
+    if (gameWon) {
+      authService.updateWinner(winnerName).then(function(response){
+        console.log("score++");
+      })  
+    }//update score
     // emit update
   }
   
