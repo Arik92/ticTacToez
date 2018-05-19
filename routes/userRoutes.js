@@ -38,8 +38,46 @@ const pool = new Pool({
   //console.log(err, res);
   pool.end()
 })*/
+//////////////////////////////////////// Server Maintainance ///////////////////////////////
 
-//the user routes go here
+setInterval(function(){
+  var text = 'UPDATE gfnzpmjz.tictactoe.users SET dailyscore = 0';  
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);           
+      //throw (err);           
+    } else {
+      console.log("Daily reset");            
+    }
+  })
+},1000*60*60*24 )// reset daily
+
+ 
+setInterval(function(){
+  var text = 'UPDATE gfnzpmjz.tictactoe.users SET weeklyscore = 0';  
+  pool.query(text, (err, res) => {
+    if (err) {
+      console.log(err.stack);           
+      //throw (err);           
+    } else {
+      console.log("Weekly Reset");            
+    }
+  })
+},1000*60*60*24*7 )// reset weekly
+ setInterval(function(){
+   var text = 'UPDATE gfnzpmjz.tictactoe.users SET monthlyscore = 0';  
+   pool.query(text, (err, res) => {
+     if (err) {
+       console.log(err.stack);           
+       //throw (err);           
+     } else {
+       console.log("Monthly Reset");            
+     }
+   })
+ },1000*60*60*24*7*3 )// reset monthly - every 3 weeks~
+ 
+ ////////////////////////////////////// Server Maintainance  /////////////////////////////////////////////////
+//the user routes
 router.post('/join', function(req, res1, next){
   var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password, totalscore, dailyscore, weeklyscore, monthlyscore) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
   var values = [req.body.username, req.body.password, 0, 0, 0, 0];
