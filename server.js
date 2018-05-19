@@ -45,7 +45,6 @@ io.on('connection', function(socket){
   })
   //console.log("there are "+io.engine.clientsCount+"people in game room");
   console.log("there are "+io.engine.clientsCount+"people in game room");
-  console.log("there are "+numPlayers+"people in game room");
 
   if (io.engine.clientsCount===1) {
     player1Socket = socket.id;
