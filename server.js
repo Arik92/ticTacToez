@@ -29,8 +29,8 @@ app.all('*', function(req, res) {
 });
 
 ////////////////////////////////////////// SOCKET INTERFACE ///////////////////////////////////////////
-var player1Socket;
-var player2Socket;
+var player1Name;
+var player2Name;
 var gameInProgress = false; //future use
 
 
@@ -41,6 +41,11 @@ io.on('connection', function(socket){
   }, 1000*60*5);// 2 minuts when testing, 5 for dev env
   //console.log(io.engine);   
   socket.on('whois', function(name){
+    if (io.engine.clientsCount===1) {
+      player1Name = name;
+    } else if (io.engine.clientsCount===2) {
+      player2Name = name;
+    };
     console.log(name+" has connected to game room");
   })
   //console.log("there are "+io.engine.clientsCount+"people in game room");
@@ -57,7 +62,9 @@ io.on('connection', function(socket){
   } else if (io.engine.clientsCount===2) {
     var game = {
       numMoves: 0,
-      board: 0
+      board: 0,
+      player1: player1Name,
+      player2: player2Name
     }//game
     socket.join('gameRoom');    
     io.sockets.in('gameRoom').emit('play', game);    

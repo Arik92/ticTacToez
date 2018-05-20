@@ -76,8 +76,7 @@ setInterval(function(){
    })
  },1000*60*60*24*7*3 )// reset monthly - every 3 weeks~
  
- ////////////////////////////////////// Server Maintainance  /////////////////////////////////////////////////
-//the user routes
+///////////////////////////////////////    Auth //////////////////////////////////////////////////////////////
 router.post('/join', function(req, res1, next){
   var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password, totalscore, dailyscore, weeklyscore, monthlyscore) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
   var values = [req.body.username, req.body.password, 0, 0, 0, 0];
@@ -97,6 +96,28 @@ router.post('/join', function(req, res1, next){
     }
   })
 });
+router.post('/login', function(req, res1) {
+  console.log("request body", req.body);
+  /*var selq = {
+    username: req.body.username
+  } */
+  var text ='SELECT username, password FROM gfnzpmjz.tictactoe.users WHERE username =$1 ';
+  //console.log("query text is", text);
+  pool.query(text,[ req.body.username], (err, res) => {
+    if (err) {
+      console.log(err.stack);    
+    } else {
+      console.log(res.rows[0]);
+      if ((res.rows[0])&&(res.rows[0].password.localeCompare(req.body.password)===0)){
+        res1.send(true);
+      } else {
+        res1.send(false)
+      }
+      //pool.end();
+    }
+  })  
+});
+
 //////////////////////////////////////////////////////// SCORE KEEPING ///////////////////////////////////
 router.put('/addScore', function(req, res1, next){
   /* UPDATE weather SET temp_lo = temp_lo+1, temp_hi = temp_lo+15, prcp = DEFAULT
@@ -174,26 +195,5 @@ WITH (
 )
 SELECT * FROM tictactoe.USERS
  */
-router.post('/login', function(req, res1) {
-  console.log("request body", req.body);
-  /*var selq = {
-    username: req.body.username
-  } */
-  var text ='SELECT username, password FROM gfnzpmjz.tictactoe.users WHERE username =$1 ';
-  //console.log("query text is", text);
-  pool.query(text,[ req.body.username], (err, res) => {
-    if (err) {
-      console.log(err.stack);    
-    } else {
-      console.log(res.rows[0]);
-      if ((res.rows[0])&&(res.rows[0].password.localeCompare(req.body.password)===0)){
-        res1.send(true);
-      } else {
-        res1.send(false)
-      }
-      //pool.end();
-    }
-  })  
-});
 
 module.exports = router;
