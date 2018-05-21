@@ -34,7 +34,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     $scope.playerValue = 1;
     $scope.player1Message = true;
     $scope.$apply();
-    console.log("You will begin the game as x. Waiting on another player");
   })
   
   socket.on('play', function(game){ //starting position
@@ -45,8 +44,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     $scope.game.player2 = game.player2;//perhaps redundant
     $scope.game.numMoves = game.numMoves;
     makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game     
-    console.log("starting game board", $scope.gameBoard);
-    console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
       $scope.game.player2 = localStorage.getItem("ticTacUser"); // updating second player      
@@ -60,8 +57,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     $scope.game.player1 = game.player1;
     $scope.game.player2 = game.player2;
     //this function gets the boardstate(ternary number) and prepares the new number array 
-    //console.log("base 3 from server", game.board);
-    console.log("base 10 from server", game.board);
     //makeBoard(baseThreeToDecimal(game.board)); 
     makeBoard(game.board);    
     $scope.$apply();
@@ -106,11 +101,9 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   }//isTwo
 
   $scope.tacMove = function(index) {            
-    console.log("player value is"+$scope.playerValue+" and number of moves is"+$scope.game.numMoves);
     //player value is either 1 for x, or 2 for circle    
     if ($scope.gameBoard[index] === 0) {
       if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 2)) {
-        console.log("turned to circle");
         $scope.gameBoard[index] = 2; 
         $scope.game.numMoves++;
         updateServer(); // when move is made, update the board,      
@@ -159,7 +152,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       winnerName = localStorage.getItem("ticTacUser");         
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
-    console.log("Im sending into the server", boardNum);
+    //console.log("Im sending into the server", boardNum);
     //boardNum = toBaseThree(boardNum); //decimal to ternary MIGHT REMOVE THIS   
     var game = {
       'board': boardNum,
@@ -171,9 +164,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     }
     socket.emit('update', game);
     if (gameWon) {
-      console.log("winner name is", winnerName);
       authService.updateWinner(winnerName).then(function(response){
-        console.log("score++");
       })  
     }//update score
     // emit update
