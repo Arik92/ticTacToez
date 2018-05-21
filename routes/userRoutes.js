@@ -1,29 +1,23 @@
 const express = require('express');
 const router = express.Router();
-var  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port;
+var  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port, Postgras_table;
 if (process.env.NODE_ENV === 'production') {
   Postgras_user = process.env.Postgras_user;
   Postgras_host = process.env.Postgras_host;//host
   Postgras_db = process.env.Postgras_db;//db
   Postgras_password = process.env.Postgras_password;
   Postgras_port = process.env.Postgras_port;//port
-  //callbackURL = "https://danktickets.herokuapp.com/users/facebook/callback";
+  Postgras_table = process.env.Postgras_table;
  } else {
-  //callbackURL = "http://localhost:8000/users/facebook/callback";
   var postgrasDefs = require('../config.js');  
   Postgras_user = postgrasDefs.Postgras_user;
    Postgras_password = postgrasDefs.Postgras_password;
    Postgras_host = postgrasDefs.Postgras_host;
    Postgras_db = postgrasDefs.Postgras_db;
    Postgras_port = postgrasDefs.Postgras_port;
+   Postgras_table = postgrasDefs.Postgras_table;
  }//else getting postgras defs
 const { Pool, Client } = require('pg');
-//console.log("db creds", Postgras_user+ Postgras_password);
-//var passport = require('passport'); consider using just localStorage
-// if login is successful, set localStorage item in controller cb
-
-//I need to connect to the remote  postgres sql server. SOMEHOW
-// Once I have that and the querying syntax nailed down I can move on
 
 const pool = new Pool({
   user: Postgras_user,
@@ -32,15 +26,10 @@ const pool = new Pool({
   password: Postgras_password,
   port: Postgras_port,
 })
-/*pool.query('SELECT * from postgres.tictactoe.users', (err, res) => {
-  console.log("user?", res);
-  console.log("error", err);
-  //console.log(err, res);
-  pool.end()
-})*/
+
 //////////////////////////////////////// Server Maintainance ///////////////////////////////
 setInterval(function(){
-  var text = 'UPDATE gfnzpmjz.tictactoe.users SET dailyscore = 0';  
+  var text = 'UPDATE '+Postgras_table+' SET dailyscore = 0';  
   pool.query(text, (err, res) => {
     if (err) {
       console.log(err.stack);           
@@ -53,7 +42,7 @@ setInterval(function(){
 
  
 setInterval(function(){
-  var text = 'UPDATE gfnzpmjz.tictactoe.users SET weeklyscore = 0';  
+  var text = 'UPDATE '+Postgras_table+' SET weeklyscore = 0';  
   pool.query(text, (err, res) => {
     if (err) {
       console.log(err.stack);           
@@ -64,7 +53,7 @@ setInterval(function(){
   })
 },1000*60*60*24*7 )// reset weekly
  setInterval(function(){
-   var text = 'UPDATE gfnzpmjz.tictactoe.users SET monthlyscore = 0';  
+   var text = 'UPDATE '+Postgras_table+' SET monthlyscore = 0';  
    pool.query(text, (err, res) => {
      if (err) {
        console.log(err.stack);           
@@ -77,7 +66,7 @@ setInterval(function(){
  
 ///////////////////////////////////////    Auth //////////////////////////////////////////////////////////////
 router.post('/join', function(req, res1, next){
-  var text = 'INSERT INTO gfnzpmjz.tictactoe.users(username, password, totalscore, dailyscore, weeklyscore, monthlyscore) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+  var text = 'INSERT INTO '+Postgras_table+'(username, password, totalscore, dailyscore, weeklyscore, monthlyscore) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
   var values = [req.body.username, req.body.password, 0, 0, 0, 0];
   pool.query(text, values, (err, res) => {
     if (err) {
@@ -100,7 +89,7 @@ router.post('/login', function(req, res1) {
   /*var selq = {
     username: req.body.username
   } */
-  var text ='SELECT username, password FROM gfnzpmjz.tictactoe.users WHERE username =$1 ';
+  var text ='SELECT username, password FROM '+Postgras_table+' WHERE username =$1 ';
   //console.log("query text is", text);
   pool.query(text,[ req.body.username], (err, res) => {
     if (err) {
@@ -122,7 +111,7 @@ router.put('/addScore', function(req, res1, next){
   /* UPDATE weather SET temp_lo = temp_lo+1, temp_hi = temp_lo+15, prcp = DEFAULT
   WHERE city = 'San Francisco' AND date = '2003-07-03';*/
   console.log("adding to ", req.body.winnerName);
-  var text = 'UPDATE gfnzpmjz.tictactoe.users SET totalscore = totalscore+1, dailyscore = dailyscore+1, weeklyscore = weeklyscore+1, monthlyscore = monthlyscore+1 WHERE username = $1';  
+  var text = 'UPDATE '+Postgras_table+' SET totalscore = totalscore+1, dailyscore = dailyscore+1, weeklyscore = weeklyscore+1, monthlyscore = monthlyscore+1 WHERE username = $1';  
   var value = [req.body.winnerName];
   pool.query(text, value, (err, res) => {
     if (err) {
@@ -135,7 +124,7 @@ router.put('/addScore', function(req, res1, next){
   })
 });
 router.get('/alltime', function(req, res1) {  
-  var text ='SELECT username, totalscore FROM gfnzpmjz.tictactoe.users ORDER BY totalscore DESC limit 10; ';
+  var text ='SELECT username, totalscore FROM '+Postgras_table+' ORDER BY totalscore DESC limit 10; ';
   //console.log("query text is", text);
   pool.query(text, (err, res) => {
     if (err) {
@@ -147,7 +136,7 @@ router.get('/alltime', function(req, res1) {
   }) 
 }); //all time scores
 router.get('/weekly', function(req, res1) {  
-  var text ='SELECT username, weeklyscore FROM gfnzpmjz.tictactoe.users ORDER BY weeklyscore DESC limit 10; ';
+  var text ='SELECT username, weeklyscore FROM '+Postgras_table+' ORDER BY weeklyscore DESC limit 10; ';
   //console.log("query text is", text);
   pool.query(text, (err, res) => {
     if (err) {
@@ -159,7 +148,7 @@ router.get('/weekly', function(req, res1) {
   }) 
 }); //weekly scores
 router.get('/monthly', function(req, res1) {  
-  var text ='SELECT username, monthlyscore FROM gfnzpmjz.tictactoe.users ORDER BY monthlyscore DESC limit 10; ';
+  var text ='SELECT username, monthlyscore FROM '+Postgras_table+' ORDER BY monthlyscore DESC limit 10; ';
   //console.log("query text is", text);
   pool.query(text, (err, res) => {
     if (err) {
@@ -171,7 +160,7 @@ router.get('/monthly', function(req, res1) {
   }) 
 });
 router.get('/daily', function(req, res1) {  
-  var text ='SELECT username, dailyscore FROM gfnzpmjz.tictactoe.users ORDER BY dailyscore DESC limit 10; ';
+  var text ='SELECT username, dailyscore FROM '+Postgras_table+' ORDER BY dailyscore DESC limit 10; ';
   //console.log("query text is", text);
   pool.query(text, (err, res) => {
     if (err) {
