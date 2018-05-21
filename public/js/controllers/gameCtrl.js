@@ -86,6 +86,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   })
   
   function isTie(board) {
+    console.log('board', board);
     for (var i=0;i<board.length;i++) {
       if (board[i]===0) {
         return false;
