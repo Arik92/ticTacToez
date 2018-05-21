@@ -41,5 +41,4 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
 app.run([ '$rootScope', function ($rootScope) {
   //$rootScope.currentUser = JSON.parse(localStorage.getItem("ticTacUser"));
    $rootScope.currentUser = localStorage.getItem("ticTacUser");
-   console.log("current user", $rootScope.currentUser);
 }])

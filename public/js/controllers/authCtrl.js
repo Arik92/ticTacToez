@@ -7,18 +7,19 @@ app.controller('authCtrl', [ '$scope','$timeout' ,'authService', '$stateParams',
 
   $scope.join = function() {
     //add validation
-    console.log("joining user? ", $scope.user);
+    //console.log("joining user? ", $scope.user);
     authService.join($scope.user)
       .then(function(result, error) {
-          console.log("signup result ", result);
+          //console.log("signup result ", result);
           if (result.data.errorText) {
               alert(result.data.errorText);
           } else {
             localStorage.setItem('ticTacUser', $scope.user.username);
               //timeout
               $timeout(function () {
-                $scope.$apply();
-                $location.path('/');
+                //$scope.$apply();
+                $location.path('/');   
+                window.location.reload(true);   
               }, 500);              
           }//else
       });
@@ -26,9 +27,7 @@ app.controller('authCtrl', [ '$scope','$timeout' ,'authService', '$stateParams',
 
   $scope.login = function() {
     //add validation
-    authService.login($scope.user).then(function(result) {
-        //console.log(result);
-        //console.log("Ctrl response is "+result+" of type "+typeof(result));
+    authService.login($scope.user).then(function(result) {       
         if (result.data===false) {
           alert("Wrong username/password");
         } else {         

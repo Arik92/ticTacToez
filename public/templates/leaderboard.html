@@ -2,19 +2,21 @@
     <div class="row">
       <div class="col-md-10 col-md-offset-1 col-xs-3"> 
         <div><h4>View score:</h4> 
-          <button class="btn" ng-click="getAllScore('all')">All Time</button>
-          <button class="btn" ng-click="getDailyScore('daily')">Daily</button>
-          <button class="btn" ng-click="getWeeklyScore('weekly')">Weekly</button>
-          <button class="btn" ng-click="getMonthlyScore('monthly')">Monthly</button>
+          <button class="btn btn-info" ng-click="getAllScore('all')">All Time</button>
+          <button class="btn btn-info" ng-click="getDailyScore('daily')">Daily</button>
+          <button class="btn btn-info" ng-click="getWeeklyScore('weekly')">Weekly</button>
+          <button class="btn btn-info" ng-click="getMonthlyScore('monthly')">Monthly</button>
         </div>   
           <h3>{{scoreLabels[scoreIndex]}}</h3>           
             <table class="table checkout-tbl ">		  		  
                 <tr>
+                  <th>#</th>
                   <th>Name</th>
                   <th>Score</th>     			  			  
                 </tr>
-                <tr ng-repeat ="entry in scores track by $index">              
-                  <td>{{entry.username}}</td>
+                <tr ng-repeat ="entry in scores track by $index">
+                    <td>{{$index+1}}</td>
+                    <td>{{entry.username}}</td>
                   <td>{{entry.score}}</td>       
                 </tr>			
               </table>                
