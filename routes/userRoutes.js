@@ -39,7 +39,6 @@ const pool = new Pool({
   pool.end()
 })*/
 //////////////////////////////////////// Server Maintainance ///////////////////////////////
-console.log("im just here man");
 setInterval(function(){
   var text = 'UPDATE gfnzpmjz.tictactoe.users SET dailyscore = 0';  
   pool.query(text, (err, res) => {

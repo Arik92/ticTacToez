@@ -1,13 +1,14 @@
 app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'authService', function($scope, $stateParams,$timeout,$state, authService) {
   
-  this.$onInit = function() {     
+  this.$onInit = function() {  
+    $scope.player1Message = false;   
     //$scope.gameBoard = [];
   }//onInit 
   var socket = io();
   socket.on('connect', function onConnect(){
     console.log('This socket is now connected to the server.');
     var name = localStorage.getItem("ticTacUser")
-    socket.emit('whois',name );
+    socket.emit('whois',name);
   });
   socket.on('clear', function(){
     alert("time's up!");
@@ -31,6 +32,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   });
   socket.on('player1Message', function(){
     $scope.playerValue = 1;
+    $scope.player1Message = true;
     console.log("You will begin the game as x. Waiting on another player");
   })
   
