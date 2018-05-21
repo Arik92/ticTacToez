@@ -5,11 +5,12 @@
     <!--css and styling links -->   
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Kavivanar" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <base href="/">
     </head>
-    <body>
-        <nav class="navbar" ng-controller="authCtrl">
+    <body id="mainframe">
+        <nav class="navbar" ng-controller="authCtrl" id="tacnav">
                 <h3 ng-if="currentUser">Welcome, {{currentUser}}</h3>
                 <a class="navbar-brand" ui-sref='signup'>Signup</a>
                 <a class="navbar-brand" ui-sref='home'>Home</a>
@@ -19,7 +20,7 @@
 
         </nav>
         <div ng-controller="homeCtrl">
-        <div ui-view></div>
+        <div ui-view ></div>
         </div>
         <!--                              dependencies                                                    -->
         <script src="/angular/angular.js"></script>
