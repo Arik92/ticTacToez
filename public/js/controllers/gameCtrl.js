@@ -69,7 +69,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
         });
       }, 1000);
     } else if (isTie(game.board)){
-      alert(game.winnerName+" its a tie!!! redirecting");
+      alert("Its a tie!!! redirecting");
       socket.emit('endgame'); // disconnect sockets after game is won
       $timeout(function () {
         $state.go('home', {}, {
