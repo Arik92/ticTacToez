@@ -14,10 +14,15 @@ Additional tests can be added to /spec/support folder. Name your test files with
 2.Navigate into your directory from the command window, and then type:
   *npm install => install dependencies
   *npm start => To have the project run on localhost
-3. Regarding database => the app makes use of postgres/sql.
+
+3.Subsection: Regarding database => the app makes use of postgres/sql.
+  connect to your db server.
   You will have to specify the following variables:
-  Postgras_user, Postgras_password,Postgras_host, Postgras_db, Postgras_port
+  Postgras_user, Postgras_password,Postgras_host, Postgras_db, and Postgras_port
   Put them in a config.js file(not included within github for security reasons. Plus local databases vary) inside the project directory
   or as environment variables.
-  You will also need to set Postgras_table to your combination of database.schema.table(ex. postgres.tictactoe.users)
-4. navigate to localhost:8000 and you should be good to go!
+  You will also need to create a users table inside a schema on your database with the fields:
+  username, password, totalscore, dailyscore, weeklyscore and monthlyscore
+  set Postgras_table to your combination of database.schema.table(ex. postgres.tictactoe.users)
+
+4. navigate to localhost:8000 on your browser and you should be good to go!
