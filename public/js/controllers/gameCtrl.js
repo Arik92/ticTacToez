@@ -86,7 +86,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   })
   
   function isTie(board) {
-    console.log('board', board);
     for (var i=0;i<board.length;i++) {
       if (board[i]===0) {
         return false;
@@ -205,7 +204,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
         res*=10;
         res+=board[i];      
     }//for 
-    console.log(board);
     return res;
   }//makeNumber 
   
