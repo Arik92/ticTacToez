@@ -10,11 +10,13 @@
           <h3>{{scoreLabels[scoreIndex]}}</h3>           
             <table class="table checkout-tbl ">		  		  
                 <tr>
+                  <th>#</th>
                   <th>Name</th>
                   <th>Score</th>     			  			  
                 </tr>
-                <tr ng-repeat ="entry in scores track by $index">              
-                  <td>{{entry.username}}</td>
+                <tr ng-repeat ="entry in scores track by $index">
+                    <td>{{$index}}</td>
+                    <td>{{entry.username}}</td>
                   <td>{{entry.score}}</td>       
                 </tr>			
               </table>                
