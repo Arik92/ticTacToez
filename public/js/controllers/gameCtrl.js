@@ -173,7 +173,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     //exact opposite of make board. take a board and turn into a decimal number
     var res = 0;
     var count = 0;
-    while (board[count]!=0) {
+    while (board[count]===0) {
       count++
     }//while removing leading zeros
     for (var i=count;i<board.length;i++) {      

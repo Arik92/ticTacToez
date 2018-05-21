@@ -16,8 +16,8 @@ function makeBoard(num) {
     return gameBoard;
   }//makeBoard  
   
-describe("tenToThree", function(){
-    it("Should turn decimal numbers into ternary based ones", function(){
+/*describe("boardTests", function(){
+    it("Should make game board arrays from decimal(after conversion) numbers", function(){
         var res1 = makeBoard(3);
         var res2 = makeBoard(27);
         var res3 = makeBoard(82);
@@ -27,13 +27,13 @@ describe("tenToThree", function(){
         expect(res3).toBe(10001);
         expect(res4).toBe(1200);
     })//it
-})//tenToThree  
+})//tenToThree  */
 
   function makeNumber(board) {
     //exact opposite of make board. take a board and turn into a decimal number
     var res = 0;
     var count = 0;
-    while (board[count]!=0) {
+    while (board[count]===0) {
       count++
     }//while removing leading zeros
     for (var i=count;i<board.length;i++) {      
@@ -43,4 +43,17 @@ describe("tenToThree", function(){
     console.log(board);
     console.log("turned into", res);
     return res;
-  }//makeNumber 
+  }//makeNumber
+  
+  describe("boardTests", function(){
+    it("Should make decimal numbers from game board arrays", function(){
+        var res1 = makeNumber([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        var res2 = makeNumber([2, 0, 2, 0, 2, 0, 0, 0, 0]);
+        var res3 = makeNumber([1, 0, 2, 1, 2, 1, 0, 0, 0]);
+        var res4 = makeNumber([0, 0, 0, 0, 0, 0, 2, 0, 2]);
+        expect(res1).toBe(0);
+        expect(res2).toBe(202020000);
+        expect(res3).toBe(102121000);
+        expect(res4).toBe(202);
+    })//it
+})//tenToThree  
