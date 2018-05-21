@@ -24,8 +24,15 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
         reload: true
       });
     }, 500);
-  });//not very DRY
-  
+  });//too many players
+  socket.on('player_disconnect', function(){
+    alert("A player has left the game. redirecting...");
+      $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+  });// handling player disconnect
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
   });

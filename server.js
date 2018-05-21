@@ -91,6 +91,9 @@ io.on('connection', function(socket){
   })
   socket.on('disconnect', function(){    
     console.log("goodbye");    
+    if (io.engine.clientsCount===1) {
+      io.sockets.in('gameRoom').emit('player_disconnect');
+    }
     console.log("engine? ", io.engine.clientsCount);  })
 });
 
