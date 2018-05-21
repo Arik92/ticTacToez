@@ -20,7 +20,7 @@
   })//tenToThree 
 
 
-  
+
   function baseThreeToDecimal(num) {
     var res = parseInt(num, 3);
     var str = res.toString(10);         
@@ -32,9 +32,11 @@
         var res2 = baseThreeToDecimal(1000);
         var res3 = baseThreeToDecimal(10001);
         var res4 = baseThreeToDecimal(1200);
+        var res5 = baseThreeToDecimal(10000);
         expect(res1).toBe(3);
         expect(res2).toBe(27);
         expect(res3).toBe(82);
         expect(res4).toBe(45);
+        
     })//it
 })//threeToTen

@@ -85,6 +85,8 @@ io.on('connection', function(socket){
   socket.on('endgame', function(socket){
     console.log("reached endgame through winning");
     gameInProgress = false;
+    player1Name = '';
+    player2Name = '';
     socket.disconnect();
   })
   socket.on('disconnect', function(){    

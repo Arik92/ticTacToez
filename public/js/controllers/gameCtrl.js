@@ -38,22 +38,26 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     var boardNum = baseThreeToDecimal(game.board);
     $scope.game = {};
     $scope.player1 = game.player1;
-    $scope.player2 = game.player2;
+    $scope.player2 = game.player2;//perhaps redundant
     $scope.game.numMoves = game.numMoves;
     makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game     
     console.log("starting game board", $scope.gameBoard);
     console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
+      game.player2 = localStorage.getItem("ticTacUser"); // updating second player
     }
+    updateServer();
     $scope.$apply();
   })
   socket.on('update', function(game){
     console.log("client update", game);
     $scope.game.numMoves = game.numMoves;
     //this function gets the boardstate(ternary number) and prepares the new number array 
-    console.log("base 3 from server", game.board);
-    makeBoard(baseThreeToDecimal(game.board)); 
+    //console.log("base 3 from server", game.board);
+    console.log("base 10 from server", game.board);
+    //makeBoard(baseThreeToDecimal(game.board)); 
+    makeBoard(game.board);
     $scope.$apply();
     if (game.gameWon)    {
       alert(game.winnerName+" is the winner!!! redirecting");
@@ -86,9 +90,11 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 2)) {
         console.log("turned to circle");
         $scope.gameBoard[index] = 2; 
+        $scope.game.numMoves++;
         updateServer(); // when move is made, update the board,      
       } else if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 1)) {
-        $scope.gameBoard[index] = 1;          
+        $scope.gameBoard[index] = 1;
+        $scope.game.numMoves++;          
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
     } //if guarentee empty square   
@@ -132,8 +138,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
     console.log("Im sending into the server", boardNum);
-    boardNum = toBaseThree(boardNum); //decimal to ternary
-    $scope.game.numMoves++;
+    //boardNum = toBaseThree(boardNum); //decimal to ternary MIGHT REMOVE THIS   
     var game = {
       'board': boardNum,
       'gameWon': isWinner,
