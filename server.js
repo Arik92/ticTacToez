@@ -36,8 +36,10 @@ var gameInProgress = false; //future use
 
 io.on('connection', function(socket){  
   setInterval(function(){
+    if (gameInProgress) {
     io.sockets.in('gameRoom').emit('clear');
     socket.disconnect();
+    }
   }, 1000*60*5);// 2 minuts when testing, 5 for dev env
   //console.log(io.engine);   
   socket.on('whois', function(name){
@@ -66,6 +68,7 @@ io.on('connection', function(socket){
       player1: player1Name,
       player2: player2Name
     }//game
+    gameInProgress = true;
     socket.join('gameRoom');    
     io.sockets.in('gameRoom').emit('play', game);    
   } else {
@@ -78,6 +81,11 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
   io.emit('chat message',msg);
   });
+  socket.on('endgame', function(socket){
+    console.log("reached endgame");
+    gameInProgress = false;
+    socket.disconnect();
+  })
   socket.on('disconnect', function(){    
     console.log("goodbye");    
     console.log("engine? ", io.engine.clientsCount);  })

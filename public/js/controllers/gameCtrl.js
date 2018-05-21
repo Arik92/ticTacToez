@@ -57,6 +57,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     $scope.$apply();
     if (game.gameWon)    {
       alert(game.winnerName+" is the winner!!! redirecting");
+      socket.emit('endgame'); // disconnect sockets after game is won
       $timeout(function () {
         $state.go('home', {}, {
           reload: true
@@ -166,7 +167,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       num = Math.floor(num/10);
     }//while 
     $scope.gameBoard[currDigit-1] = num;   
-  }
+  }//makeBoard
 
   function makeNumber(board) {
     //exact opposite of make board. take a board and turn into a decimal number
