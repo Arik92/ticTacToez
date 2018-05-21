@@ -60,7 +60,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     //console.log("base 3 from server", game.board);
     console.log("base 10 from server", game.board);
     //makeBoard(baseThreeToDecimal(game.board)); 
-    makeBoard(game.board);
+    makeBoard(game.board);    
     $scope.$apply();
     if (game.gameWon)    {
       alert(game.winnerName+" is the winner!!! redirecting");
@@ -70,9 +70,25 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
           reload: true
         });
       }, 1000);
-    }//if winner
+    } else if (isTie(game.board)){
+      alert(game.winnerName+" its a tie!!! redirecting");
+      socket.emit('endgame'); // disconnect sockets after game is won
+      $timeout(function () {
+        $state.go('home', {}, {
+          reload: true
+        });
+      }, 1000);
+    }//if there's a tie
   })
-
+  
+  function isTie(board) {
+    for (var i=0;i<board.length;i++) {
+      if (board[i]===0) {
+        return false;
+      }
+    }//for 
+    return true;
+  }//isTie 
   $scope.isOne = function(num) {    
     if (num===1) {
       return true;
