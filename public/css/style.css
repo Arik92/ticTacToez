@@ -1,5 +1,5 @@
 .navbar {
-    border: 4px solid lightgrey;
+    border: 4px solid #5B446A;
 }
 .square {
     float:left;
@@ -27,4 +27,12 @@
     vertical-align:middle;
     height:100%;
     width:100%;
+}
+#mainframe{
+    background-color: #4C9173;
+    height: 80%;
+    font-family: 'Kavivanar', cursive;
+}
+#tacnav{
+    background-color: #7DD87D;    
 }

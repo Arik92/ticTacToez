@@ -14,13 +14,16 @@ app.factory('authService', function($http) {
           return response;
         });
     };
-  
-    auth.getCurrentUser = function() {
-      return $http.get('/users/currentUser')
-        .then(function(response) {
-          return response.data;
-        })
-    }  
+
+    auth.updateWinner = function(winnerName) {  
+      var winObj = {
+        'winnerName': winnerName
+      }//winObj    
+      return $http.put('/users/addScore', winObj)
+      .then(function(response){
+        return response.data;
+      })
+    }
   
     return auth;
   });

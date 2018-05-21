@@ -1,38 +1,91 @@
-app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $stateParams, ) {
+app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'authService', function($scope, $stateParams,$timeout,$state, authService) {
   
-  this.$onInit = function() {     
-    $scope.gameBoard = [];
+  this.$onInit = function() {  
+    $scope.player1Message = false;   
+    //$scope.gameBoard = [];
   }//onInit 
   var socket = io();
   socket.on('connect', function onConnect(){
-    console.log('This socket is now connected to the server.');
+    var name = localStorage.getItem("ticTacUser")
+    socket.emit('whois',name);
   });
+  socket.on('clear', function(){
+    alert("time's up!");
+      $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+  });//
+  socket.on('toomany', function(){
+    alert("Game room full for now. Check back soon");
+      $timeout(function () {      
+      $state.go('home', {}, {
+        reload: true
+      });
+    }, 500);
+  });//not very DRY
+  
   socket.on('disconnect', function onDisConnect(){
     console.log('disconnecad.');
   });
   socket.on('player1Message', function(){
     $scope.playerValue = 1;
-    console.log("You will begin the game as x. Waiting on another player");
+    $scope.player1Message = true;
+    $scope.$apply();
   })
   
   socket.on('play', function(game){ //starting position
-    var boardNum = baseThreeToDecimal(game.gameBoard);
+        $scope.gameBoard = [];
+    var boardNum = baseThreeToDecimal(game.board);
+    $scope.game = {};
+    $scope.game.player1 = game.player1;
+    $scope.game.player2 = game.player2;//perhaps redundant
     $scope.game.numMoves = game.numMoves;
-    $scope.gameBoard = makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game 
-    console.log(game);
+    makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game     
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
-    }
-    $scope.gameBoard = board;
-    console.log("Starting board ",board);
+      $scope.game.player2 = localStorage.getItem("ticTacUser"); // updating second player      
+    }// if on player 2's side
+    updateServer();
+    $scope.$apply();
   })
   socket.on('update', function(game){
-    console.log("client update");
+    console.log("client update", game);
     $scope.game.numMoves = game.numMoves;
+    $scope.game.player1 = game.player1;
+    $scope.game.player2 = game.player2;
     //this function gets the boardstate(ternary number) and prepares the new number array 
-    $scope.gameBoard = makeBoard(baseThreeToDecimal(board));         
+    //makeBoard(baseThreeToDecimal(game.board)); 
+    makeBoard(game.board);    
+    $scope.$apply();
+    if (game.gameWon)    {
+      alert(game.winnerName+" is the winner!!! redirecting");
+      socket.emit('endgame'); // disconnect sockets after game is won
+      $timeout(function () {
+        $state.go('home', {}, {
+          reload: true
+        });
+      }, 1000);
+    } else if (isTie(game.board)){
+      alert("Its a tie!!! redirecting");
+      socket.emit('endgame'); // disconnect sockets after game is won
+      $timeout(function () {
+        $state.go('home', {}, {
+          reload: true
+        });
+      }, 1000);
+    }//if there's a tie
   })
-
+  
+  function isTie(board) {
+    for (var i=0;i<board.length;i++) {
+      if (board[i]===0) {
+        return false;
+      }
+    }//for 
+    return true;
+  }//isTie 
   $scope.isOne = function(num) {    
     if (num===1) {
       return true;
@@ -46,14 +99,16 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     return false;
   }//isTwo
 
-  $scope.tacMove = function($index) {            
+  $scope.tacMove = function(index) {            
     //player value is either 1 for x, or 2 for circle    
-    if ($scope.gameBoard[$index] === 0) {
-      if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 2)) {
-        $scope.gameBoard[$index] = 2; 
+    if ($scope.gameBoard[index] === 0) {
+      if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 2)) {
+        $scope.gameBoard[index] = 2; 
+        $scope.game.numMoves++;
         updateServer(); // when move is made, update the board,      
-      } else if (($scope.game.numMoves % 2 !== 0) && ($scope.playerValue === 1)) {
-        $scope.gameBoard[$index] = 1;   
+      } else if (($scope.game.numMoves % 2 === 0) && ($scope.playerValue === 1)) {
+        $scope.gameBoard[index] = 1;
+        $scope.game.numMoves++;          
         updateServer(); // when move is made, update the board,       
       } //else if right player/move
     } //if guarentee empty square   
@@ -86,57 +141,65 @@ app.controller('gameCtrl', [ '$scope', '$stateParams', function($scope, $statePa
     }//else
   }//checkWin
   
-  function updateServer() {
+  function updateServer(game) {
+    var isWinner = false;
     //check for winner needs to be done HERE, because the board is still in array form
     var gameWon = checkWin();
     var winnerName = null;
     if (gameWon) {
-      winnerName = localStorage.getItem("ticTacUser");
-      console.log("winner identity is", winnerName);
+      isWinner = true;
+      winnerName = localStorage.getItem("ticTacUser");         
     }// if getting winner identity
     var boardNum = makeNumber($scope.gameBoard); //array to decimal
-    boardNum = toBaseThree(boardNum); //decimal to ternary
-    $scope.game.numMoves++;
-    var boardState = {
+    //console.log("Im sending into the server", boardNum);
+    //boardNum = toBaseThree(boardNum); //decimal to ternary MIGHT REMOVE THIS   
+    var game = {
       'board': boardNum,
       'gameWon': isWinner,
       'winnerName': winnerName,
-      'numMoves': $scope.game.numMoves
+      'numMoves': $scope.game.numMoves,
+      'player1': $scope.game.player1,
+      'player2': $scope.game.player2
     }
-
-    socket.emit('update', boardState);
+    socket.emit('update', game);
+    if (gameWon) {
+      authService.updateWinner(winnerName).then(function(response){
+      })  
+    }//update score
     // emit update
   }
+  
 
   ////////////////////////********************CONVERSION FUNCTIONS**************************************/////////////////////
   function makeBoard(num) {
     //function takes a DECIMAL number and turns it into a length 9 array with appropriate numbers
     //ex: [0][0][0][0][0][0][0][0][0] for empty board( 0 for input)
     console.log("initial num", num);
-    var gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    var currDigit = gameBoard.length;//9
+    $scope.gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var currDigit = $scope.gameBoard.length;//9
     var dig;
     while (num>=10) {
       dig = Math.floor(num%10); //takes rightmost digit
       console.log("current rightmost digit is"+num+" , "+dig);
-      gameBoard[currDigit-1] = dig;
+      $scope.gameBoard[currDigit-1] = dig;
       currDigit--;
       num = Math.floor(num/10);
     }//while 
-    gameBoard[currDigit-1] = num;    
-  }
+    $scope.gameBoard[currDigit-1] = num;   
+  }//makeBoard
 
   function makeNumber(board) {
     //exact opposite of make board. take a board and turn into a decimal number
     var res = 0;
     var count = 0;
-    while (board[count]!=0) {
+    while (board[count]===0) {
       count++
     }//while removing leading zeros
     for (var i=count;i<board.length;i++) {      
         res*=10;
         res+=board[i];      
     }//for 
+    console.log(board);
     console.log("turned into", res);
     return res;
   }//makeNumber 

@@ -19,13 +19,9 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     })
     .state('leaderboard', {
       url: '/leaderboard',
-      templateUrl: '/templates/leaderboard.html'      
-    }) //seems likke a static page for now
-    /*.state('create', {
-      url: '/create',
-      templateUrl: '/templates/createBattle.html',
-      controller: 'btlCtrl1'
-    })*/
+      templateUrl: '/templates/leaderboard.html',
+      controller: 'fameCtrl'      
+    }) //seems likke a static page for now   
     .state('signup', {
       url: '/signup',
       templateUrl: '/templates/signup.html',

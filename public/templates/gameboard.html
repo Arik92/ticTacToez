@@ -1,16 +1,21 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-xs-3">
+            <div ng-show="player1Message">You will begin the game as X. Waiting for another player to join</div>
+            <div ng-show="gameBoard">
+            <h2>Its {{game.player1}} Vs. {{game.player2}}</h2>
+            <h4 ng-show="game.numMoves%2===0">Its {{game.player1}}'s Move</h4>
+            <h4 ng-show="game.numMoves%2!==0">Its {{game.player2}}'s Move</h4>
+        </div>
                 <div class="square" ng-repeat="square in gameBoard track by $index">
                 <div class="content">
                     <div class="table">
                         <div class="table-cell" ng-click="tacMove($index)"> 
-                                <img ng-if="isOne(square)"style="height: 15em; width: 15em" src="x.jpeg" />                                                            
+                                <img ng-if="isOne(square)"style="height: 15em; width: 15em" src="X.jpeg" />                                                            
                                 <img ng-if="isTwo(square)"style="height: 15em; width: 15em" src="circle.jpeg" />                             
                             </div>
                     </div>
-                </div>
-                
+                </div>                
             </div>
         </div>
     </div>

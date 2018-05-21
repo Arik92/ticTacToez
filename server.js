@@ -29,45 +29,69 @@ app.all('*', function(req, res) {
 });
 
 ////////////////////////////////////////// SOCKET INTERFACE ///////////////////////////////////////////
-var player1Socket;
-var player2Socket;
-var gameInProgress = false; //future use
+var player1Name;
+var player2Name;
+var gameInProgress = false; 
+
 
 io.on('connection', function(socket){  
-  //console.log(io.engine);
+  setInterval(function(){
+    if (gameInProgress) {
+    io.sockets.in('gameRoom').emit('clear');
+    gameInProgress = false;
+    socket.disconnect();
+    }
+  }, 1000*60*5);// 2 minuts when testing, 5 for dev env
+  //console.log(io.engine);   
+  socket.on('whois', function(name){
+    if (io.engine.clientsCount===1) {
+      player1Name = name;
+    } else if (io.engine.clientsCount===2) {
+      player2Name = name;
+    };
+    console.log(name+" has connected to game room");
+  })
+  //console.log("there are "+io.engine.clientsCount+"people in game room");
+  console.log("there are "+io.engine.clientsCount+"people in game room");
+
   if (io.engine.clientsCount===1) {
     player1Socket = socket.id;
     console.log("player 1 id ", player1Socket);
     socket.join('gameRoom');
     //socket.to(player1Socket).emit('private', 'I just met you'); -> PM
-    io.sockets.in('gameRoom').emit('player1Message', 'x');
-    io.sockets.in('gameRoom').emit('player2Message', 'o');
+    io.sockets.in('gameRoom').emit('player1Message');    
     //io.sockets.broadcast.to(player1Socket).emit('private', 'for your eyes only');
     //socket.broadcast.to('gameRoom').emit('waiting', 'Loading... Waiting for a player to join');
   } else if (io.engine.clientsCount===2) {
     var game = {
       numMoves: 0,
-      gameBoard: 0
+      board: 0,
+      player1: player1Name,
+      player2: player2Name
     }//game
+    gameInProgress = true;
     socket.join('gameRoom');    
     io.sockets.in('gameRoom').emit('play', game);    
   } else {
     io.emit('tooMany', 'Game already in progress. Check again soon!');
+    socket.disconnect();
   }  
-  socket.on('update', function(game){
-    if (game.winner!==null) {
-      io.sockets.in('gameRoom').emit('winner', game);
-      //TODO: server request for winner handling in db
-    }// if we have a winner
+  socket.on('update', function(game){    
     io.sockets.in('gameRoom').emit('update', game);
   })
   socket.on('chat message', function(msg){
   io.emit('chat message',msg);
   });
-  socket.on('disconnect', function(){    
-    console.log("goodbye");
-    console.log("engine? ", io.engine.clientsCount);
+  socket.on('endgame', function(){
+    console.log("reached endgame through winning");
+    gameInProgress = false;
+    player1Name = '';
+    player2Name = '';
+    socket.disconnect();
   })
+  socket.on('disconnect', function(){    
+    console.log("goodbye");    
+    console.log("engine? ", io.engine.clientsCount);  })
 });
 
 
@@ -82,6 +106,6 @@ io.on('connection', function(socket){
 });*/
 
 
-server.listen(8000, function() {
+server.listen(process.env.PORT || 8000, function() {
   console.log("Tic Tac Toe!!! Listening on port 8000.");
 });
