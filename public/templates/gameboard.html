@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-xs-3">
             <div ng-show="gameBoard">
-            <h2>Its {{player1}} Vs. {{player2}}</h2>
-            <h4 ng-show="numMoves%2===0">Its {{player2}}'s Move</h4>
-            <h4 ng-show="numMoves%2!==0">Its {{player1}}'s Move</h4>
+            <h2>Its {{game.player1}} Vs. {{game.player2}}</h2>
+            <h4 ng-show="numMoves%2===0">Its {{game.player2}}'s Move</h4>
+            <h4 ng-show="numMoves%2!==0">Its {{game.player1}}'s Move</h4>
         </div>
                 <div class="square" ng-repeat="square in gameBoard track by $index">
                 <div class="content">

@@ -38,23 +38,24 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
         $scope.gameBoard = [];
     var boardNum = baseThreeToDecimal(game.board);
     $scope.game = {};
-    $scope.player1 = game.player1;
-    $scope.player2 = game.player2;//perhaps redundant
+    $scope.game.player1 = game.player1;
+    $scope.game.player2 = game.player2;//perhaps redundant
     $scope.game.numMoves = game.numMoves;
     makeBoard(boardNum);// at this stage can also be replaced by 0. Start of game     
     console.log("starting game board", $scope.gameBoard);
     console.log(game);
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
-      game.player2 = localStorage.getItem("ticTacUser"); // updating second player
-      $scope.player2 = game.player2;
-    }
+      $scope.game.player2 = localStorage.getItem("ticTacUser"); // updating second player      
+    }// if on player 2's side
     updateServer();
     $scope.$apply();
   })
   socket.on('update', function(game){
     console.log("client update", game);
     $scope.game.numMoves = game.numMoves;
+    $scope.game.player1 = game.player1;
+    $scope.game.player2 = game.player2;
     //this function gets the boardstate(ternary number) and prepares the new number array 
     //console.log("base 3 from server", game.board);
     console.log("base 10 from server", game.board);
@@ -129,7 +130,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     }//else
   }//checkWin
   
-  function updateServer() {
+  function updateServer(game) {
     var isWinner = false;
     //check for winner needs to be done HERE, because the board is still in array form
     var gameWon = checkWin();
@@ -145,7 +146,9 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       'board': boardNum,
       'gameWon': isWinner,
       'winnerName': winnerName,
-      'numMoves': $scope.game.numMoves
+      'numMoves': $scope.game.numMoves,
+      'player1': $scope.game.player1,
+      'player2': $scope.game.player2
     }
     socket.emit('update', game);
     if (gameWon) {
