@@ -34,7 +34,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     }, 500);
   });// handling player disconnect
   socket.on('disconnect', function onDisConnect(){
-    console.log('disconnecad.');
+    console.log('disconnected.');
   });
   socket.on('player1Message', function(){
     $scope.playerValue = 1;
