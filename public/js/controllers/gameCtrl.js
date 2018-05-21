@@ -1,7 +1,7 @@
 app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'authService', function($scope, $stateParams,$timeout,$state, authService) {
   
   this.$onInit = function() {     
-    $scope.gameBoard = [];
+    //$scope.gameBoard = [];
   }//onInit 
   var socket = io();
   socket.on('connect', function onConnect(){
@@ -35,6 +35,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   })
   
   socket.on('play', function(game){ //starting position
+        $scope.gameBoard = [];
     var boardNum = baseThreeToDecimal(game.board);
     $scope.game = {};
     $scope.player1 = game.player1;
