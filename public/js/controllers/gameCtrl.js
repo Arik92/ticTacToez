@@ -47,6 +47,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     if ($scope.playerValue!==1) {
       $scope.playerValue = 2;
       game.player2 = localStorage.getItem("ticTacUser"); // updating second player
+      $scope.player2 = game.player2;
     }
     updateServer();
     $scope.$apply();
