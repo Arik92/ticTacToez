@@ -31,13 +31,14 @@ app.all('*', function(req, res) {
 ////////////////////////////////////////// SOCKET INTERFACE ///////////////////////////////////////////
 var player1Name;
 var player2Name;
-var gameInProgress = false; //future use
+var gameInProgress = false; 
 
 
 io.on('connection', function(socket){  
   setInterval(function(){
     if (gameInProgress) {
     io.sockets.in('gameRoom').emit('clear');
+    gameInProgress = false;
     socket.disconnect();
     }
   }, 1000*60*5);// 2 minuts when testing, 5 for dev env
@@ -82,7 +83,7 @@ io.on('connection', function(socket){
   io.emit('chat message',msg);
   });
   socket.on('endgame', function(socket){
-    console.log("reached endgame");
+    console.log("reached endgame through winning");
     gameInProgress = false;
     socket.disconnect();
   })
