@@ -3,7 +3,6 @@ app.controller('authCtrl', [ '$scope','$timeout' ,'authService', '$stateParams',
     this.$onInit = function() {
       //$scope.currentUser = false;
       //$scope.currentUser = localStorage.getItem("ticTacUser");        
-      console.log("current user is", $scope.currentUser);    
     }//on init
 
   $scope.join = function() {
