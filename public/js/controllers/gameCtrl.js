@@ -58,7 +58,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
     $scope.$apply();
   })
   socket.on('update', function(game){
-    console.log("client update", game);
+    //console.log("client update", game);
     $scope.game.numMoves = game.numMoves;
     $scope.game.player1 = game.player1;
     $scope.game.player2 = game.player2;
@@ -182,13 +182,11 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   function makeBoard(num) {
     //function takes a DECIMAL number and turns it into a length 9 array with appropriate numbers
     //ex: [0][0][0][0][0][0][0][0][0] for empty board( 0 for input)
-    console.log("initial num", num);
     $scope.gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     var currDigit = $scope.gameBoard.length;//9
     var dig;
     while (num>=10) {
       dig = Math.floor(num%10); //takes rightmost digit
-      console.log("current rightmost digit is"+num+" , "+dig);
       $scope.gameBoard[currDigit-1] = dig;
       currDigit--;
       num = Math.floor(num/10);
@@ -208,7 +206,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
         res+=board[i];      
     }//for 
     console.log(board);
-    console.log("turned into", res);
     return res;
   }//makeNumber 
   
@@ -216,14 +213,12 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
       //converts a decimal number to base 3 representation. for board-state record keeping
       var str = num.toString(3);
        var res = parseInt(str, 10);
-      console.log(num+" to base 3 "+res+" and its a "+typeof(res));
       return res;
   }//toBaseThree 
   
   function baseThreeToDecimal(num) {
     var res = parseInt(num, 3);
     var str = res.toString(10);   
-      console.log(num+" to base 10 "+str);
       return res;
   }//BTTD consider migrating these to a service   
 
