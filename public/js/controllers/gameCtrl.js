@@ -6,7 +6,6 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   }//onInit 
   var socket = io();
   socket.on('connect', function onConnect(){
-    console.log('This socket is now connected to the server.');
     var name = localStorage.getItem("ticTacUser")
     socket.emit('whois',name);
   });
