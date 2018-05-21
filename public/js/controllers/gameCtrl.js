@@ -33,7 +33,7 @@ app.controller('gameCtrl', [ '$scope', '$stateParams','$timeout','$state', 'auth
   socket.on('player1Message', function(){
     $scope.playerValue = 1;
     $scope.player1Message = true;
-    $socpe.$apply();
+    $scope.$apply();
     console.log("You will begin the game as x. Waiting on another player");
   })
   
